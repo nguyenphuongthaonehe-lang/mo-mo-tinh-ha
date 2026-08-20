@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mộ Mộ Tinh Hà — Kho Truyện</title>
+<style>
+:root{
+  --bg:#f7f7f7;--card:#fff;--text:#111;--muted:#777;--line:#e5e5e5;
+  --black:#111;--soft:#eee;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Georgia,"Times New Roman",serif}
+button,input{font:inherit}
+button{cursor:pointer}
+header{background:#111;color:#fff;position:sticky;top:0;z-index:20;box-shadow:0 2px 12px #0002}
+.nav{max-width:1050px;margin:auto;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-size:22px;font-weight:bold;letter-spacing:1px}
+.navlinks{display:flex;gap:8px;flex-wrap:wrap}
+.navlinks button,.theme{border:1px solid #444;background:#222;color:#fff;border-radius:20px;padding:8px 13px}
+main{max-width:1050px;margin:auto;padding:28px 18px 60px}
+.hero{background:#111;color:#fff;border-radius:18px;padding:38px 25px;margin-bottom:25px}
+.hero h1{font-size:42px;margin:0 0 10px}
+.hero p{color:#ccc;line-height:1.7;margin:0;max-width:650px}
+.search{margin:22px 0;display:flex;gap:10px}
+.search input{flex:1;border:1px solid var(--line);border-radius:12px;padding:13px 15px;background:#fff;outline:none}
+.section-title{display:flex;align-items:center;justify-content:space-between;margin:28px 0 14px}
+.section-title h2{margin:0;font-size:24px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 4px 18px #00000008}
+.cover{height:230px;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;font-size:28px;font-weight:bold}
+.card-body{padding:17px}
+.card h3{margin:0 0 7px;font-size:21px}
+.meta{color:var(--muted);font-size:14px}
+.card p{color:#555;line-height:1.55;font-family:Arial,sans-serif;font-size:14px}
+.btn{display:inline-block;border:0;border-radius:10px;background:#111;color:#fff;padding:10px 14px;margin-top:8px}
+.back{background:transparent;color:#111;border:1px solid #bbb}
+.detail{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px}
+.detail-top{display:grid;grid-template-columns:230px 1fr;gap:25px}
+.bigcover{height:320px;background:#111;color:#fff;border-radius:14px;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;font-size:32px;font-weight:bold}
+.detail h1{font-size:34px;margin-top:0}
+.detail p,.chapter-text{line-height:1.9;font-size:18px}
+.chapter-list{display:grid;gap:8px;margin-top:15px}
+.chapter{padding:13px 15px;background:#fafafa;border:1px solid var(--line);border-radius:10px;display:flex;justify-content:space-between;gap:10px}
+.reader{max-width:780px;margin:auto;background:#fff;padding:35px 25px;border-radius:18px;border:1px solid var(--line)}
+.reader h1{font-size:32px;margin:0 0 8px}
+.reader .author{color:var(--muted);margin-bottom:28px}
+.chapter-text p{margin:0 0 18px}
+.reader-controls{position:sticky;bottom:12px;background:#111;color:#fff;border-radius:15px;padding:9px;display:flex;justify-content:center;gap:7px;margin-top:28px}
+.reader-controls button{border:1px solid #444;background:#222;color:#fff;border-radius:9px;padding:8px 11px}
+footer{text-align:center;color:#888;padding:25px;border-top:1px solid var(--line);font-family:Arial,sans-serif;font-size:13px}
+.hidden{display:none!important}
+.empty{text-align:center;padding:50px;color:#777}
+@media(max-width:720px){
+ .grid{grid-template-columns:1fr 1fr}
+ .detail-top{grid-template-columns:1fr}
+ .bigcover{height:280px}
+ .hero h1{font-size:34px}
+}
+@media(max-width:470px){
+ .grid{grid-template-columns:1fr}
+ .cover{height:260px}
+ .reader{padding:25px 18px}
+ .reader h1{font-size:27px}
+ .chapter-text{font-size:17px}
+}
+body.dark{--bg:#0c0c0c;--card:#171717;--text:#eee;--muted:#aaa;--line:#303030;--soft:#222}
+body.dark .search input{background:#171717;color:#fff}
+body.dark .card p{color:#bbb}
+body.dark .chapter{background:#111}
+body.dark .back{color:#fff;border-color:#555}
+</style>
+</head>
+<body>
+<header>
+  <div class="nav">
+    <div class="logo">MỘ MỘ TINH HÀ</div>
+    <div class="navlinks">
+      <button onclick="home()">Trang chủ</button>
+      <button onclick="showLibrary()">Kho truyện</button>
+      <button class="theme" onclick="toggleTheme()">☾</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<section id="home">
+  <div class="hero">
+    <h1>Mộ Mộ Tinh Hà</h1>
+    <p>Nơi những câu chuyện bắt đầu từ một trang giấy.</p>
+  </div>
+  <div class="search">
+    <input id="searchInput" placeholder="Tìm tên truyện..." oninput="renderBooks()">
+  </div>
+  <div class="section-title"><h2>Truyện nổi bật</h2></div>
+  <div id="bookGrid" class="grid"></div>
+</section>
+
+<section id="library" class="hidden">
+  <div class="section-title">
+    <h2>Kho truyện</h2>
+    <button class="btn back" onclick="home()">← Trang chủ</button>
+  </div>
+  <div class="search">
+    <input id="searchLibrary" placeholder="Tìm truyện..." oninput="renderLibrary()">
+  </div>
+  <div id="libraryGrid" class="grid"></div>
+</section>
+
+<section id="bookDetail" class="hidden"></section>
+<section id="reader" class="hidden"></section>
+</main>
+
+<footer>© 2026 Mộ Mộ Tinh Hà · Website đọc truyện</footer>
+
+<script>
+const books=[
+{
+ id:1,title:"Đợi Gió",author:"Mộ Mộ Tinh Hà",
+ desc:"Một câu chuyện hiện đại về những con người từng lạc mất nhau giữa những năm tháng tuổi trẻ.",
+ cover:"ĐỢI GIÓ",
+ chapters:[
+  ["Chương 1: Ngày trở về","Có những cuộc gặp gỡ tưởng như tình cờ, nhưng thật ra đã được định sẵn từ rất lâu. Năm năm sau, cô trở về thành phố cũ, mang theo những bí mật chưa từng kể với bất kỳ ai."],
+  ["Chương 2: Người quen cũ","Anh vẫn đứng ở nơi ấy. Chỉ là lần này, ánh mắt nhìn cô đã không còn giống năm năm trước."],
+  ["Chương 3: Một lời chưa nói","Có những lời càng muốn nói ra, càng khó mở lời. Và có những người, một khi đã bỏ lỡ, thì rất lâu sau mới hiểu mình từng quý trọng họ đến nhường nào."]
+ ]
+},
+{
+ id:2,title:"Quỳ Hồi",author:"Mộ Mộ Tinh Hà",
+ desc:"Một hành trình trở về, nơi quá khứ và hiện tại cùng mở ra một ván cờ mới.",
+ cover:"QUỲ HỒI",
+ chapters:[
+  ["Chương 1: Trở lại","Năm năm đủ để một người thay đổi rất nhiều. Nhưng có những thứ, dù thời gian trôi bao lâu, vẫn không thể thực sự biến mất."],
+  ["Chương 2: Ván cờ","Cô đặt quân cờ cuối cùng xuống bàn. Lần này, không ai có thể ép cô lựa chọn nữa."]
+ ]
+},
+{
+ id:3,title:"Ngày Nắng Lên",author:"Mộ Mộ Tinh Hà",
+ desc:"Có những ngày tưởng như tận cùng, nhưng bình minh vẫn sẽ đến.",
+ cover:"NGÀY NẮNG LÊN",
+ chapters:[
+  ["Chương 1: Bình minh","Ngoài cửa sổ, trời vừa sáng. Thành phố thức giấc sau một đêm dài, còn cô bắt đầu lại cuộc đời mình từ con số không."]
+ ]
+}
+];
+
+let currentBook=null,currentChapter=0,readerSize=18;
+
+function hideAll(){["home","library","bookDetail","reader"].forEach(x=>document.getElementById(x).classList.add("hidden"))}
+function home(){hideAll();document.getElementById("home").classList.remove("hidden");window.scrollTo(0,0);renderBooks()}
+function showLibrary(){hideAll();document.getElementById("library").classList.remove("hidden");renderLibrary();window.scrollTo(0,0)}
+function renderBooks(){
+ const q=(document.getElementById("searchInput").value||"").toLowerCase();
+ const list=books.filter(b=>b.title.toLowerCase().includes(q));
+ document.getElementById("bookGrid").innerHTML=list.map(card).join("")||'<div class="empty">Không tìm thấy truyện.</div>';
+}
+function renderLibrary(){
+ const q=(document.getElementById("searchLibrary").value||"").toLowerCase();
+ const list=books.filter(b=>b.title.toLowerCase().includes(q));
+ document.getElementById("libraryGrid").innerHTML=list.map(card).join("")||'<div class="empty">Không tìm thấy truyện.</div>';
+}
+function card(b){
+ return `<article class="card">
+  <div class="cover">${b.cover}</div>
+  <div class="card-body">
+   <h3>${b.title}</h3><div class="meta">${b.author} · ${b.chapters.length} chương</div>
+   <p>${b.desc}</p>
+   <button class="btn" onclick="openBook(${b.id})">Xem truyện</button>
+  </div>
+ </article>`;
+}
+function openBook(id){
+ currentBook=books.find(b=>b.id===id);hideAll();
+ const d=document.getElementById("bookDetail");d.classList.remove("hidden");
+ d.innerHTML=`<div class="detail">
+  <button class="btn back" onclick="showLibrary()">← Quay lại</button>
+  <div class="detail-top" style="margin-top:20px">
+   <div class="bigcover">${currentBook.cover}</div>
+   <div><h1>${currentBook.title}</h1><div class="meta">Tác giả: ${currentBook.author}</div>
+   <p>${currentBook.desc}</p><button class="btn" onclick="readChapter(0)">Đọc từ đầu</button></div>
+  </div>
+  <div class="section-title"><h2>Danh sách chương</h2></div>
+  <div class="chapter-list">${currentBook.chapters.map((c,i)=>`<div class="chapter"><span>${c[0]}</span><button class="btn" style="margin:0" onclick="readChapter(${i})">Đọc</button></div>`).join("")}</div>
+ </div>`;
+ window.scrollTo(0,0);
+}
+function readChapter(i){
+ currentChapter=i;hideAll();const r=document.getElementById("reader");r.classList.remove("hidden");
+ const c=currentBook.chapters[i];
+ r.innerHTML=`<article class="reader">
+  <button class="btn back" onclick="openBook(${currentBook.id})">← Mục lục</button>
+  <div style="margin-top:25px"><h1>${c[0]}</h1><div class="author">${currentBook.title} · ${currentBook.author}</div></div>
+  <div class="chapter-text" id="chapterText"><p>${c[1]}</p></div>
+  <div class="reader-controls">
+   <button onclick="changeFont(-1)">A−</button><button onclick="changeFont(1)">A+</button>
+   <button onclick="prevChapter()">← Trước</button><button onclick="nextChapter()">Sau →</button>
+  </div>
+ </article>`;
+ document.getElementById("chapterText").style.fontSize=readerSize+"px";window.scrollTo(0,0);
+}
+function prevChapter(){if(currentChapter>0)readChapter(currentChapter-1)}
+function nextChapter(){if(currentChapter<currentBook.chapters.length-1)readChapter(currentChapter+1)}
+function changeFont(n){readerSize=Math.max(14,Math.min(26,readerSize+n));const t=document.getElementById("chapterText");if(t)t.style.fontSize=readerSize+"px"}
+function toggleTheme(){document.body.classList.toggle("dark");localStorage.setItem("dark",document.body.classList.contains("dark"))}
+if(localStorage.getItem("dark")==="true")document.body.classList.add("dark");
+renderBooks();
+</script>
+</body>
+</html>
