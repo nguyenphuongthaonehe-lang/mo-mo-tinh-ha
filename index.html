@@ -1,209 +1,34 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mộ Mộ Tinh Hà — Kho Truyện</title>
-<style>
-:root{
-  --bg:#f7f7f7;--card:#fff;--text:#111;--muted:#777;--line:#e5e5e5;
-  --black:#111;--soft:#eee;
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Georgia,"Times New Roman",serif}
-button,input{font:inherit}
-button{cursor:pointer}
-header{background:#111;color:#fff;position:sticky;top:0;z-index:20;box-shadow:0 2px 12px #0002}
-.nav{max-width:1050px;margin:auto;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.logo{font-size:22px;font-weight:bold;letter-spacing:1px}
-.navlinks{display:flex;gap:8px;flex-wrap:wrap}
-.navlinks button,.theme{border:1px solid #444;background:#222;color:#fff;border-radius:20px;padding:8px 13px}
-main{max-width:1050px;margin:auto;padding:28px 18px 60px}
-.hero{background:#111;color:#fff;border-radius:18px;padding:38px 25px;margin-bottom:25px}
-.hero h1{font-size:42px;margin:0 0 10px}
-.hero p{color:#ccc;line-height:1.7;margin:0;max-width:650px}
-.search{margin:22px 0;display:flex;gap:10px}
-.search input{flex:1;border:1px solid var(--line);border-radius:12px;padding:13px 15px;background:#fff;outline:none}
-.section-title{display:flex;align-items:center;justify-content:space-between;margin:28px 0 14px}
-.section-title h2{margin:0;font-size:24px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 4px 18px #00000008}
-.cover{height:230px;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;font-size:28px;font-weight:bold}
-.card-body{padding:17px}
-.card h3{margin:0 0 7px;font-size:21px}
-.meta{color:var(--muted);font-size:14px}
-.card p{color:#555;line-height:1.55;font-family:Arial,sans-serif;font-size:14px}
-.btn{display:inline-block;border:0;border-radius:10px;background:#111;color:#fff;padding:10px 14px;margin-top:8px}
-.back{background:transparent;color:#111;border:1px solid #bbb}
-.detail{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px}
-.detail-top{display:grid;grid-template-columns:230px 1fr;gap:25px}
-.bigcover{height:320px;background:#111;color:#fff;border-radius:14px;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;font-size:32px;font-weight:bold}
-.detail h1{font-size:34px;margin-top:0}
-.detail p,.chapter-text{line-height:1.9;font-size:18px}
-.chapter-list{display:grid;gap:8px;margin-top:15px}
-.chapter{padding:13px 15px;background:#fafafa;border:1px solid var(--line);border-radius:10px;display:flex;justify-content:space-between;gap:10px}
-.reader{max-width:780px;margin:auto;background:#fff;padding:35px 25px;border-radius:18px;border:1px solid var(--line)}
-.reader h1{font-size:32px;margin:0 0 8px}
-.reader .author{color:var(--muted);margin-bottom:28px}
-.chapter-text p{margin:0 0 18px}
-.reader-controls{position:sticky;bottom:12px;background:#111;color:#fff;border-radius:15px;padding:9px;display:flex;justify-content:center;gap:7px;margin-top:28px}
-.reader-controls button{border:1px solid #444;background:#222;color:#fff;border-radius:9px;padding:8px 11px}
-footer{text-align:center;color:#888;padding:25px;border-top:1px solid var(--line);font-family:Arial,sans-serif;font-size:13px}
-.hidden{display:none!important}
-.empty{text-align:center;padding:50px;color:#777}
-@media(max-width:720px){
- .grid{grid-template-columns:1fr 1fr}
- .detail-top{grid-template-columns:1fr}
- .bigcover{height:280px}
- .hero h1{font-size:34px}
-}
-@media(max-width:470px){
- .grid{grid-template-columns:1fr}
- .cover{height:260px}
- .reader{padding:25px 18px}
- .reader h1{font-size:27px}
- .chapter-text{font-size:17px}
-}
-body.dark{--bg:#0c0c0c;--card:#171717;--text:#eee;--muted:#aaa;--line:#303030;--soft:#222}
-body.dark .search input{background:#171717;color:#fff}
-body.dark .card p{color:#bbb}
-body.dark .chapter{background:#111}
-body.dark .back{color:#fff;border-color:#555}
-</style>
-</head>
-<body>
-<header>
-  <div class="nav">
-    <div class="logo">MỘ MỘ TINH HÀ</div>
-    <div class="navlinks">
-      <button onclick="home()">Trang chủ</button>
-      <button onclick="showLibrary()">Kho truyện</button>
-      <button class="theme" onclick="toggleTheme()">☾</button>
-    </div>
-  </div>
-</header>
-
-<main>
-<section id="home">
-  <div class="hero">
-    <h1>Mộ Mộ Tinh Hà</h1>
-    <p>Nơi những câu chuyện bắt đầu từ một trang giấy.</p>
-  </div>
-  <div class="search">
-    <input id="searchInput" placeholder="Tìm tên truyện..." oninput="renderBooks()">
-  </div>
-  <div class="section-title"><h2>Truyện nổi bật</h2></div>
-  <div id="bookGrid" class="grid"></div>
-</section>
-
-<section id="library" class="hidden">
-  <div class="section-title">
-    <h2>Kho truyện</h2>
-    <button class="btn back" onclick="home()">← Trang chủ</button>
-  </div>
-  <div class="search">
-    <input id="searchLibrary" placeholder="Tìm truyện..." oninput="renderLibrary()">
-  </div>
-  <div id="libraryGrid" class="grid"></div>
-</section>
-
-<section id="bookDetail" class="hidden"></section>
-<section id="reader" class="hidden"></section>
-</main>
-
-<footer>© 2026 Mộ Mộ Tinh Hà · Website đọc truyện</footer>
-
-<script>
-const books=[
-{
- id:1,title:"Đợi Gió",author:"Mộ Mộ Tinh Hà",
- desc:"Một câu chuyện hiện đại về những con người từng lạc mất nhau giữa những năm tháng tuổi trẻ.",
- cover:"ĐỢI GIÓ",
- chapters:[
-  ["Chương 1: Ngày trở về","Có những cuộc gặp gỡ tưởng như tình cờ, nhưng thật ra đã được định sẵn từ rất lâu. Năm năm sau, cô trở về thành phố cũ, mang theo những bí mật chưa từng kể với bất kỳ ai."],
-  ["Chương 2: Người quen cũ","Anh vẫn đứng ở nơi ấy. Chỉ là lần này, ánh mắt nhìn cô đã không còn giống năm năm trước."],
-  ["Chương 3: Một lời chưa nói","Có những lời càng muốn nói ra, càng khó mở lời. Và có những người, một khi đã bỏ lỡ, thì rất lâu sau mới hiểu mình từng quý trọng họ đến nhường nào."]
- ]
-},
-{
- id:2,title:"Quỳ Hồi",author:"Mộ Mộ Tinh Hà",
- desc:"Một hành trình trở về, nơi quá khứ và hiện tại cùng mở ra một ván cờ mới.",
- cover:"QUỲ HỒI",
- chapters:[
-  ["Chương 1: Trở lại","Năm năm đủ để một người thay đổi rất nhiều. Nhưng có những thứ, dù thời gian trôi bao lâu, vẫn không thể thực sự biến mất."],
-  ["Chương 2: Ván cờ","Cô đặt quân cờ cuối cùng xuống bàn. Lần này, không ai có thể ép cô lựa chọn nữa."]
- ]
-},
-{
- id:3,title:"Ngày Nắng Lên",author:"Mộ Mộ Tinh Hà",
- desc:"Có những ngày tưởng như tận cùng, nhưng bình minh vẫn sẽ đến.",
- cover:"NGÀY NẮNG LÊN",
- chapters:[
-  ["Chương 1: Bình minh","Ngoài cửa sổ, trời vừa sáng. Thành phố thức giấc sau một đêm dài, còn cô bắt đầu lại cuộc đời mình từ con số không."]
- ]
-}
-];
-
-let currentBook=null,currentChapter=0,readerSize=18;
-
-function hideAll(){["home","library","bookDetail","reader"].forEach(x=>document.getElementById(x).classList.add("hidden"))}
-function home(){hideAll();document.getElementById("home").classList.remove("hidden");window.scrollTo(0,0);renderBooks()}
-function showLibrary(){hideAll();document.getElementById("library").classList.remove("hidden");renderLibrary();window.scrollTo(0,0)}
-function renderBooks(){
- const q=(document.getElementById("searchInput").value||"").toLowerCase();
- const list=books.filter(b=>b.title.toLowerCase().includes(q));
- document.getElementById("bookGrid").innerHTML=list.map(card).join("")||'<div class="empty">Không tìm thấy truyện.</div>';
-}
-function renderLibrary(){
- const q=(document.getElementById("searchLibrary").value||"").toLowerCase();
- const list=books.filter(b=>b.title.toLowerCase().includes(q));
- document.getElementById("libraryGrid").innerHTML=list.map(card).join("")||'<div class="empty">Không tìm thấy truyện.</div>';
-}
-function card(b){
- return `<article class="card">
-  <div class="cover">${b.cover}</div>
-  <div class="card-body">
-   <h3>${b.title}</h3><div class="meta">${b.author} · ${b.chapters.length} chương</div>
-   <p>${b.desc}</p>
-   <button class="btn" onclick="openBook(${b.id})">Xem truyện</button>
-  </div>
- </article>`;
-}
-function openBook(id){
- currentBook=books.find(b=>b.id===id);hideAll();
- const d=document.getElementById("bookDetail");d.classList.remove("hidden");
- d.innerHTML=`<div class="detail">
-  <button class="btn back" onclick="showLibrary()">← Quay lại</button>
-  <div class="detail-top" style="margin-top:20px">
-   <div class="bigcover">${currentBook.cover}</div>
-   <div><h1>${currentBook.title}</h1><div class="meta">Tác giả: ${currentBook.author}</div>
-   <p>${currentBook.desc}</p><button class="btn" onclick="readChapter(0)">Đọc từ đầu</button></div>
-  </div>
-  <div class="section-title"><h2>Danh sách chương</h2></div>
-  <div class="chapter-list">${currentBook.chapters.map((c,i)=>`<div class="chapter"><span>${c[0]}</span><button class="btn" style="margin:0" onclick="readChapter(${i})">Đọc</button></div>`).join("")}</div>
- </div>`;
- window.scrollTo(0,0);
-}
-function readChapter(i){
- currentChapter=i;hideAll();const r=document.getElementById("reader");r.classList.remove("hidden");
- const c=currentBook.chapters[i];
- r.innerHTML=`<article class="reader">
-  <button class="btn back" onclick="openBook(${currentBook.id})">← Mục lục</button>
-  <div style="margin-top:25px"><h1>${c[0]}</h1><div class="author">${currentBook.title} · ${currentBook.author}</div></div>
-  <div class="chapter-text" id="chapterText"><p>${c[1]}</p></div>
-  <div class="reader-controls">
-   <button onclick="changeFont(-1)">A−</button><button onclick="changeFont(1)">A+</button>
-   <button onclick="prevChapter()">← Trước</button><button onclick="nextChapter()">Sau →</button>
-  </div>
- </article>`;
- document.getElementById("chapterText").style.fontSize=readerSize+"px";window.scrollTo(0,0);
-}
-function prevChapter(){if(currentChapter>0)readChapter(currentChapter-1)}
-function nextChapter(){if(currentChapter<currentBook.chapters.length-1)readChapter(currentChapter+1)}
-function changeFont(n){readerSize=Math.max(14,Math.min(26,readerSize+n));const t=document.getElementById("chapterText");if(t)t.style.fontSize=readerSize+"px"}
-function toggleTheme(){document.body.classList.toggle("dark");localStorage.setItem("dark",document.body.classList.contains("dark"))}
-if(localStorage.getItem("dark")==="true")document.body.classList.add("dark");
-renderBooks();
-</script>
-</body>
-</html>
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#241d27"><title>MỘ MỘ TINH HÀ — Kho truyện</title><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet"><style>
+:root{--bg:#f7f4f0;--paper:#fffdfa;--ink:#28222b;--muted:#817783;--line:#e9e1e7;--plum:#68485f;--soft:#f0e8ee;--gold:#b18a55}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:'Be Vietnam Pro',sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer}.top{background:#211b25;color:#eee;padding:12px 5%;font-size:11px;letter-spacing:.15em;display:flex;justify-content:space-between}.top span{color:#d6b994}.nav{background:var(--paper);position:sticky;top:0;border-bottom:1px solid var(--line);z-index:5}.navin{max-width:1150px;margin:auto;padding:15px 20px;display:flex;align-items:center;gap:20px}.brand{font:800 22px 'Playfair Display';color:var(--plum)}.brand small{display:block;font:10px 'Be Vietnam Pro';letter-spacing:.3em;color:var(--gold)}.navright{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}.wrap{max-width:1150px;margin:auto;padding:28px 20px 65px}.btn{border:0;border-radius:8px;background:var(--plum);color:white;padding:10px 15px;font-size:12px;font-weight:600}.btn.light{background:var(--soft);color:var(--plum)}.btn.line{background:white;border:1px solid var(--line);color:var(--plum)}.hero{border-radius:18px;padding:50px 7%;background:linear-gradient(115deg,#302431,#73536b);color:white;display:flex;align-items:center;justify-content:space-between;gap:20px}.hero h1{font:800 clamp(32px,5vw,50px) 'Playfair Display';line-height:1.15;margin:12px 0}.hero p{font-size:13px;line-height:1.9;color:#eadfe8;max-width:600px}.eyebrow{font-size:10px;letter-spacing:.25em;color:#e4c79a}.seal{width:130px;height:130px;border:1px solid #ffffff55;border-radius:50%;display:grid;place-items:center;font:700 30px 'Playfair Display';color:#ead0ad;flex-shrink:0}.search{display:flex;gap:8px;max-width:520px}.search input{flex:1;min-width:0;padding:12px;border-radius:8px;border:1px solid #ffffff55;background:#ffffff18;color:white}.search input::placeholder{color:#ddd}.head{display:flex;justify-content:space-between;align-items:end;margin:35px 0 16px}.head h2{font:700 25px 'Playfair Display';margin:0}.muted{font-size:12px;color:var(--muted);margin-top:5px}.filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:17px}.chip{border:1px solid var(--line);background:white;color:#625965;border-radius:30px;padding:7px 12px;font-size:11px}.chip.active{background:var(--plum);color:white}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:17px}.book{background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer}.book:hover{box-shadow:0 12px 28px #30203018;transform:translateY(-3px)}.cover{height:210px;background:linear-gradient(145deg,#493649,#a17b91);display:grid;place-items:center;padding:20px;text-align:center;color:white;font:700 21px 'Playfair Display';position:relative}.cover:after{content:'✧';position:absolute;right:10px;top:0;font:100px Georgia;color:#ffffff20}.book:nth-child(4n+2) .cover{background:linear-gradient(145deg,#29414a,#8199a1)}.book:nth-child(4n+3) .cover{background:linear-gradient(145deg,#584034,#bd8b68)}.book:nth-child(4n) .cover{background:linear-gradient(145deg,#38334e,#9386ac)}.bookbody{padding:12px}.bookbody b{font-size:13px}.bookbody p{font-size:11px;color:var(--muted);margin:6px 0}.meta{font-size:10px;color:var(--plum)}.hidden{display:none!important}.panel{background:white;border:1px solid var(--line);border-radius:13px;padding:25px}.detail{display:grid;grid-template-columns:220px 1fr;gap:25px;background:white;border:1px solid var(--line);border-radius:14px;padding:25px}.detail .cover{height:300px;border-radius:9px}.detail h1{font:700 31px 'Playfair Display';margin:5px 0}.detail p{font-size:13px;line-height:1.9;color:#6e6570}.back{border:0;background:none;color:var(--plum);padding:0;margin:0 0 18px}.chapters{margin-top:20px;border-top:1px solid var(--line)}.chapter{padding:13px 5px;border-bottom:1px solid var(--line);font-size:13px;cursor:pointer;display:flex;justify-content:space-between}.chapter:hover{color:var(--plum)}.reader{max-width:780px;margin:auto;background:white;border:1px solid var(--line);border-radius:14px;padding:35px 7%}.reader h1{text-align:center;font:700 25px 'Playfair Display'}.content{font:18px/2.1 Georgia,serif;white-space:pre-wrap;margin:35px 0;color:#39313b}.readerbar{display:flex;justify-content:space-between;gap:8px}.readerbar button{padding:9px 13px;border:1px solid var(--line);background:white;border-radius:7px;color:var(--plum)}.modalback{position:fixed;inset:0;background:#1b1420aa;display:grid;place-items:center;padding:15px;z-index:20}.modal{background:white;padding:25px;border-radius:14px;width:min(430px,100%)}.modal h2{font:700 25px 'Playfair Display'}.field{display:grid;gap:5px;margin:12px 0}.field label{font-size:11px;color:var(--muted)}.field input,.field textarea,.field select{border:1px solid var(--line);border-radius:7px;padding:10px;width:100%}.field textarea{min-height:120px}.admin{background:#f4edf2;border:1px solid #e4d6e0;border-radius:12px;padding:18px;margin:15px 0}.footer{background:#211b25;color:#cfc1cd;text-align:center;padding:30px;font-size:11px;line-height:2}.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#241d27;color:white;padding:12px 18px;border-radius:8px;z-index:40;font-size:12px}@media(max-width:800px){.grid{grid-template-columns:repeat(3,1fr)}.seal{display:none}}@media(max-width:550px){.grid{grid-template-columns:repeat(2,1fr);gap:10px}.cover{height:170px;font-size:17px}.wrap{padding:18px 13px 50px}.hero{padding:30px 20px}.detail{grid-template-columns:1fr;padding:15px}.detail .cover{height:240px;max-width:200px;width:100%;margin:auto}.reader{padding:23px 16px}.content{font-size:17px}.brand{font-size:18px}}
+</style></head><body><div class="top"><span>THẾ GIỚI CỦA NHỮNG CÂU CHUYỆN</span><span>ĐỌC CHẬM · CẢM SÂU · NHỚ LÂU</span></div><nav class="nav"><div class="navin"><a class="brand" href="#" onclick="home();return false">MỘ MỘ TINH HÀ<small>STORIES UNDER THE STARS</small></a><div class="navright" id="account"><button class="btn light" onclick="authModal()">Đăng nhập</button></div></div></nav>
+<main class="wrap"><section id="home"><div class="hero"><div><div class="eyebrow">A LITTLE UNIVERSE OF STORIES</div><h1>Nơi câu chuyện<br>tìm thấy bầu trời.</h1><p>Một góc nhỏ dành cho những tâm hồn yêu truyện. Chọn một câu chuyện, thả mình vào từng chương và lưu lại những điều bạn yêu thích.</p><div class="search"><input id="q" placeholder="Tìm tên truyện, tác giả..." oninput="render()"><button class="btn" onclick="library()">Khám phá</button></div></div><div class="seal">墨<br>星河</div></div><div class="head"><div><h2>Kho truyện</h2><div class="muted">Những câu chuyện đang chờ bạn khám phá</div></div></div><div id="filters" class="filters"></div><div id="books" class="grid"></div><div class="head"><div><h2>Tủ sách của bạn</h2><div class="muted">Lưu truyện yêu thích và tiếp tục hành trình đọc</div></div></div><div class="panel" id="personal">Đăng nhập để lưu truyện yêu thích và đồng bộ tiến độ đọc.</div></section>
+<section id="detail" class="hidden"></section><section id="reader" class="hidden"></section><section id="favorites" class="hidden"><button class="back" onclick="home()">← Trang chủ</button><h1 style="font:700 30px 'Playfair Display'">Tủ sách của tôi</h1><div id="favlist" class="grid"></div></section><section id="admin" class="hidden"><button class="back" onclick="home()">← Trang chủ</button><h1 style="font:700 30px 'Playfair Display'">Quản trị nội dung</h1><div class="admin"><h3>Thêm / sửa truyện</h3><input id="bid" type="hidden"><div class="field"><label>Tên truyện</label><input id="bt"></div><div class="field"><label>Tác giả</label><input id="ba"></div><div class="field"><label>Thể loại, cách nhau bằng dấu phẩy</label><input id="bg"></div><div class="field"><label>Mô tả</label><textarea id="bd"></textarea></div><div class="field"><label>URL ảnh bìa (không bắt buộc)</label><input id="bc"></div><button class="btn" onclick="saveBook()">Lưu truyện</button><button class="btn light" onclick="clearBook()">Làm mới</button></div><div class="admin"><h3>Thêm chương</h3><div class="field"><label>Truyện</label><select id="cb"></select></div><div class="field"><label>Số chương</label><input id="cn" type="number" min="1" value="1"></div><div class="field"><label>Tên chương</label><input id="ct"></div><div class="field"><label>Nội dung</label><textarea id="cc"></textarea></div><button class="btn" onclick="saveChapter()">Lưu chương</button></div><div class="admin"><h3>Danh sách truyện</h3><div id="adminlist"></div></div></section></main><footer class="footer">MỘ MỘ TINH HÀ · STORIES UNDER THE STARS<br>Một góc nhỏ để những câu chuyện được tiếp tục.<br><span id="status">Đang kết nối dữ liệu...</span></footer><div id="modal"></div><div id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
+const db=supabase.createClient('https://uznnqzssdtjmtvbkeygr.supabase.co','sb_publishable_aUvoOT-5-iikvXqK_4b-xQ_drTHmegJ');
+let books=[],chapters=[],user=null,profile=null,book=null,chapterIndex=0,genre='Tất cả',authMode='login';
+const el=id=>document.getElementById(id), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function msg(s){el('toast').innerHTML='<div class="toast">'+esc(s)+'</div>';setTimeout(()=>el('toast').innerHTML='',2600)}
+function page(id){['home','detail','reader','favorites','admin'].forEach(x=>el(x).classList.toggle('hidden',x!==id));scrollTo(0,0)}function home(){page('home');render()}function library(){page('home');el('q').focus()}
+function card(b,i){return '<article class="book" onclick="openBook(\''+b.id+'\')">'+(b.cover_url?'<div class="cover" style="background: url('+esc(b.cover_url)+') center/cover"></div>':'<div class="cover">'+esc(b.title)+'</div>')+'<div class="bookbody"><b>'+esc(b.title)+'</b><p>'+esc(b.author||'Chưa rõ tác giả')+'</p><span class="meta">'+esc((b.genres||[])[0]||'Truyện')+'</span></div></article>'}
+function render(){let q=(el('q')?.value||'').toLowerCase();let genres=['Tất cả',...new Set(books.flatMap(b=>b.genres||[]))];el('filters').innerHTML=genres.map(g=>'<button class="chip '+(genre===g?'active':'')+'" onclick="genre=\''+esc(g)+'\';render()">'+esc(g)+'</button>').join('');let list=books.filter(b=>(genre==='Tất cả'||(b.genres||[]).includes(genre))&&(!q||(b.title+' '+(b.author||'')+' '+(b.description||'')).toLowerCase().includes(q)));el('books').innerHTML=list.length?list.map(card).join(''):'<div class="panel" style="grid-column:1/-1">Chưa có truyện. Quản trị viên có thể đăng truyện đầu tiên sau khi cài đặt cơ sở dữ liệu.</div>'}
+async function load(){let s=await db.auth.getSession();user=s.data.session?.user||null;if(user){let p=await db.from('profiles').select('*').eq('id',user.id).maybeSingle();profile=p.data}await loadBooks();account();el('status').textContent='Đã kết nối dịch vụ dữ liệu Supabase'}
+async function loadBooks(){let r=await db.from('books').select('*').eq('is_published',true).order('updated_at',{ascending:false});if(r.error){books=[];el('status').textContent='Chưa cài SQL database — xem README_SETUP.md';console.error(r.error)}else books=r.data||[];render()}
+function account(){el('account').innerHTML=user?'<button class="btn light" onclick="favorites()">Tủ sách</button>'+(profile?.role==='admin'?'<button class="btn light" onclick="admin()">Quản trị</button>':'')+'<button class="btn" onclick="logout()">Đăng xuất</button>':'<button class="btn light" onclick="authModal()">Đăng nhập</button>';el('personal').innerHTML=user?'Xin chào <b>'+esc(profile?.display_name||user.email)+'</b>! Truyện yêu thích được lưu theo tài khoản.':'Đăng nhập để lưu truyện yêu thích và đồng bộ tiến độ đọc.'}
+function authModal(){authMode='login';el('modal').innerHTML='<div class="modalback" onclick="if(event.target===this)closeModal()"><div class="modal"><h2 id="atitle">Đăng nhập</h2><div class="field"><label>Email</label><input id="email" type="email"></div><div class="field"><label>Mật khẩu</label><input id="pass" type="password"></div><div class="field hidden" id="namefield"><label>Tên hiển thị</label><input id="name"></div><button class="btn" style="width:100%" onclick="authSubmit()">Tiếp tục</button><p class="muted" id="authhint">Chưa có tài khoản? <a href="#" onclick="toggleAuth();return false">Đăng ký</a></p><button class="back" onclick="closeModal()">Đóng</button></div></div>'}
+function toggleAuth(){authMode=authMode==='login'?'signup':'login';el('atitle').textContent=authMode==='login'?'Đăng nhập':'Tạo tài khoản';el('namefield').classList.toggle('hidden',authMode==='login');el('authhint').innerHTML=authMode==='login'?'Chưa có tài khoản? <a href="#" onclick="toggleAuth();return false">Đăng ký</a>':'Đã có tài khoản? <a href="#" onclick="toggleAuth();return false">Đăng nhập</a>'}
+function closeModal(){el('modal').innerHTML=''}
+async function authSubmit(){let email=el('email').value.trim(),password=el('pass').value;if(!email||password.length<6)return msg('Nhập email và mật khẩu tối thiểu 6 ký tự.');let r=authMode==='signup'?await db.auth.signUp({email,password,options:{data:{display_name:el('name').value.trim()}}}):await db.auth.signInWithPassword({email,password});if(r.error)return msg(r.error.message);if(authMode==='signup'&&!r.data.session){msg('Đã gửi email xác nhận. Hãy xác nhận rồi đăng nhập.');closeModal();return}user=r.data.user;await load();closeModal();msg('Đăng nhập thành công')}
+async function logout(){await db.auth.signOut();user=null;profile=null;account();msg('Đã đăng xuất')}
+async function openBook(id){book=books.find(x=>x.id===id);let r=await db.from('chapters').select('*').eq('book_id',id).eq('is_published',true).order('chapter_number');chapters=r.data||[];page('detail');el('detail').innerHTML='<button class="back" onclick="home()">← Trang chủ</button><div class="detail"><div class="cover">'+esc(book.title)+'</div><div><div class="eyebrow">MỘ MỘ TINH HÀ · BOOK</div><h1>'+esc(book.title)+'</h1><div class="muted">'+esc(book.author||'')+' · '+esc((book.genres||[]).join(' / '))+'</div><p>'+esc(book.description||'Chưa có giới thiệu.')+'</p><button class="btn" onclick="chapters.length?read(0):msg(\'Truyện chưa có chương.\')">Đọc từ đầu</button> <button class="btn light" onclick="favorite(\''+id+'\')">♡ Lưu truyện</button><div class="chapters"><h3>Danh sách chương ('+chapters.length+')</h3>'+(chapters.map((c,i)=>'<div class="chapter" onclick="read('+i+')">Chương '+c.chapter_number+' · '+esc(c.title||'')+' <span>Đọc →</span></div>').join('')||'<p class="muted">Chưa có chương xuất bản.</p>')+'</div></div></div>'}
+async function read(i){chapterIndex=i;let c=chapters[i];page('reader');el('reader').innerHTML='<div class="reader"><button class="back" onclick="openBook(\''+book.id+'\')">← Danh sách chương</button><div class="muted" style="text-align:center">'+esc(book.title)+'</div><h1>Chương '+c.chapter_number+' · '+esc(c.title||'')+'</h1><div class="content">'+esc(c.content)+'</div><div class="readerbar"><button '+(i===0?'disabled':'')+' onclick="read('+(i-1)+')">← Chương trước</button><span class="muted">'+(i+1)+' / '+chapters.length+'</span><button '+(i===chapters.length-1?'disabled':'')+' onclick="read('+(i+1)+')">Chương sau →</button></div></div>';if(user)await db.from('reading_progress').upsert({user_id:user.id,book_id:book.id,chapter_id:c.id,updated_at:new Date().toISOString()},{onConflict:'user_id,book_id'})}
+async function favorite(id){if(!user)return authModal();let r=await db.from('favorites').select('id').eq('user_id',user.id).eq('book_id',id).maybeSingle();if(r.data)await db.from('favorites').delete().eq('id',r.data.id);else{let x=await db.from('favorites').insert({user_id:user.id,book_id:id});if(x.error)return msg(x.error.message)}msg('Đã cập nhật tủ sách')}
+async function favorites(){if(!user)return authModal();page('favorites');let r=await db.from('favorites').select('books(*)').eq('user_id',user.id);el('favlist').innerHTML=(r.data||[]).filter(x=>x.books).map(x=>card(x.books)).join('')||'<div class="panel">Tủ sách của bạn đang trống.</div>'}
+async function admin(){if(profile?.role!=='admin')return msg('Bạn không có quyền quản trị.');page('admin');el('cb').innerHTML=books.map(b=>'<option value="'+b.id+'">'+esc(b.title)+'</option>').join('');el('adminlist').innerHTML=books.map(b=>'<div class="chapter">'+esc(b.title)+' <span><button class="btn light" onclick="editBook(\''+b.id+'\')">Sửa</button> <button class="btn line" onclick="delBook(\''+b.id+'\')">Xóa</button></span></div>').join('')}
+function clearBook(){['bid','bt','ba','bg','bd','bc'].forEach(x=>el(x).value='')}
+function editBook(id){let b=books.find(x=>x.id===id);el('bid').value=id;el('bt').value=b.title;el('ba').value=b.author||'';el('bg').value=(b.genres||[]).join(', ');el('bd').value=b.description||'';el('bc').value=b.cover_url||'';scrollTo(0,0)}
+async function saveBook(){let title=el('bt').value.trim();if(!title)return msg('Nhập tên truyện.');let obj={title,author:el('ba').value,genres:el('bg').value.split(',').map(x=>x.trim()).filter(Boolean),description:el('bd').value,cover_url:el('bc').value||null,is_published:true,updated_at:new Date().toISOString()};let id=el('bid').value;let r=id?await db.from('books').update(obj).eq('id',id):await db.from('books').insert({...obj,created_by:user.id});if(r.error)return msg(r.error.message);clearBook();await loadBooks();admin();msg('Đã lưu truyện')}
+async function saveChapter(){let obj={book_id:el('cb').value,chapter_number:Number(el('cn').value),title:el('ct').value,content:el('cc').value,is_published:true,created_by:user.id};let r=await db.from('chapters').upsert(obj,{onConflict:'book_id,chapter_number'});if(r.error)return msg(r.error.message);msg('Đã lưu chương')}
+async function delBook(id){if(!confirm('Xóa truyện và toàn bộ chương?'))return;let r=await db.from('books').delete().eq('id',id);if(r.error)return msg(r.error.message);await loadBooks();admin()}
+db.auth.onAuthStateChange(async(_e,s)=>{user=s?.user||null;if(user){let p=await db.from('profiles').select('*').eq('id',user.id).maybeSingle();profile=p.data}else profile=null;account()});
+load().catch(e=>{console.error(e);el('status').textContent='Lỗi kết nối dữ liệu'});
+</script></body></html>
